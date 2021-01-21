@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Builder
 public class Recipe {
+
     @Id
     private String id;
     private String description;
-
 }
