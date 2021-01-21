@@ -16,10 +16,12 @@ public class RecipeRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        Recipe recipe1 = new Recipe();
-        recipe1.setDescription("Alice");
-        Recipe recipe2 = new Recipe();
-        recipe2.setDescription("Bob");
+        Recipe recipe1 = Recipe.builder()
+                .description("Alice")
+                .build();
+        Recipe recipe2 = Recipe.builder()
+                .description("Bob")
+                .build();
         //save recipes, verify has ID value after save
         assertNull(recipe1.getId());
         assertNull(recipe2.getId());//null before save
