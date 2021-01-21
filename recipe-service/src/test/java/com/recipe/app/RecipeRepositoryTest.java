@@ -1,7 +1,7 @@
 package com.recipe.app;
 
 import com.recipe.app.recipe.Recipe;
-import com.recipe.app.recipe.RecipeMongoRepository;
+import com.recipe.app.recipe.RecipeRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,22 +9,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class RecipeMongoRepositoryTest {
+public class RecipeRepositoryTest {
 
     @Autowired
-    private RecipeMongoRepository recipeMongoRepository;
+    private RecipeRepository recipeRepository;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Recipe recipe1 = new Recipe();
         recipe1.setDescription("Alice");
         Recipe recipe2 = new Recipe();
         recipe2.setDescription("Bob");
-        //save product, verify has ID value after save
+        //save recipes, verify has ID value after save
         assertNull(recipe1.getId());
         assertNull(recipe2.getId());//null before save
-        this.recipeMongoRepository.save(recipe1);
-        this.recipeMongoRepository.save(recipe2);
+        this.recipeRepository.save(recipe1);
+        this.recipeRepository.save(recipe2);
         assertNotNull(recipe1.getId());
         assertNotNull(recipe2.getId());
     }
@@ -32,12 +32,12 @@ public class RecipeMongoRepositoryTest {
     @Test
     public void testFetchData() {
         /*Test data retrieval*/
-        Recipe userA = recipeMongoRepository.findByDescription("Bob");
-        assertNotNull(userA);
-        /*Get all products, list should only have two*/
-        Iterable users = recipeMongoRepository.findAll();
+        Recipe recipe = recipeRepository.findByDescription("Bob");
+        assertNotNull(recipe);
+        /*Get all recipes, list should only have two*/
+        Iterable recipes = recipeRepository.findAll();
         int count = 0;
-        for (Object p : users) {
+        for (Object p : recipes) {
             count++;
         }
         assertEquals(count, 2);
@@ -46,14 +46,14 @@ public class RecipeMongoRepositoryTest {
     @Test
     public void testDataUpdate() {
         /*Test update*/
-        Recipe userB = recipeMongoRepository.findByDescription("Bob");
-        recipeMongoRepository.save(userB);
-        Recipe userC = recipeMongoRepository.findByDescription("Bob");
-        assertNotNull(userC);
+        Recipe recipeB = recipeRepository.findByDescription("Bob");
+        recipeRepository.save(recipeB);
+        Recipe recipeC = recipeRepository.findByDescription("Bob");
+        assertNotNull(recipeC);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
-        this.recipeMongoRepository.deleteAll();
+    public void tearDown() {
+        this.recipeRepository.deleteAll();
     }
 }
