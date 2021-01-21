@@ -36,7 +36,7 @@ public class UserMongoRepositoryTest {
     @Test
     public void testFetchData() {
         // test data retrieval
-        User userA = userMongoRepository.findByName(username1);
+        User userA = userMongoRepository.findByUsername(username1);
         assertNotNull(userA);
         assertEquals(email1, userA.getEmail());
 
@@ -53,10 +53,10 @@ public class UserMongoRepositoryTest {
     public void testDataUpdate() {
         // test update
         String newEmail = "new_user2@123.com";
-        User userB = userMongoRepository.findByName(username2);
+        User userB = userMongoRepository.findByUsername(username2);
         userB.setEmail(newEmail);
         userMongoRepository.save(userB);
-        User userC = userMongoRepository.findByName(username2);
+        User userC = userMongoRepository.findByUsername(username2);
         assertEquals(newEmail, userC.getEmail());
     }
 
