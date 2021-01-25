@@ -1,11 +1,15 @@
 package com.recipe.app.user;
 
 
+import com.recipe.app.user.model.User;
+import com.recipe.app.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,19 +18,24 @@ public class UserMongoRepositoryTest {
 
     private final String username1 = "user1_username";
     private final String username2 = "user2_username";
+    private final String username3 = "user3_username";
     private final String email1 = "user1@123.com";
     private final String email2 = "user2@123.com";
+    private final String email3 = username1;
+    private final String id2 = "1234567890";
 
     @Autowired
-    private UserMongoRepository userMongoRepository;
+    private UserRepository userMongoRepository;
 
     @BeforeEach
     public void setUp() {
         User user1 = new User(username1, email1);
         User user2 = new User(username2, email2);
-        //save product, verify has ID value after save
+
+        //save product, to verify has ID value after save. Manually set ID #2
         assertNull(user1.getId());
-        assertNull(user2.getId());//null before save
+        assertNull(user2.getId());
+        user2.setId(id2);
         this.userMongoRepository.save(user1);
         this.userMongoRepository.save(user2);
         assertNotNull(user1.getId());
@@ -36,9 +45,10 @@ public class UserMongoRepositoryTest {
     @Test
     public void testFetchData() {
         // test data retrieval
-        User userA = userMongoRepository.findByUsername(username1);
-        assertNotNull(userA);
-        assertEquals(email1, userA.getEmail());
+        Optional<User> user = userMongoRepository.findById(id2);
+        User userB = user.get();
+        assertNotNull(userB);
+        assertEquals(email1, userB.getEmail());
 
         // get all entries, expecting 2
         Iterable users = userMongoRepository.findAll();
@@ -53,10 +63,10 @@ public class UserMongoRepositoryTest {
     public void testDataUpdate() {
         // test update
         String newEmail = "new_user2@123.com";
-        User userB = userMongoRepository.findByUsername(username2);
+        User userB = userMongoRepository.findById(id2).get();
         userB.setEmail(newEmail);
         userMongoRepository.save(userB);
-        User userC = userMongoRepository.findByUsername(username2);
+        User userC = userMongoRepository.findById(id2).get();
         assertEquals(newEmail, userC.getEmail());
     }
 
