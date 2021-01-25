@@ -21,7 +21,7 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<Recipe> getRecipe(@PathVariable String id) {
+    public ResponseEntity<Recipe> getById(@PathVariable String id) {
         return recipeService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(new ResponseEntity<>(NOT_FOUND));
